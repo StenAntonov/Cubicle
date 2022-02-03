@@ -2,7 +2,7 @@ module.exports = {
     create: (req, res) => {
         res.render('create', {title: 'Create Cube'});
     },
-    post: async (req, res) => {
+    createPost: async (req, res) => {
         const cube = {
             name: req.body.name,
             description: req.body.description,
