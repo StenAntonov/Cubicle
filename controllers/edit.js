@@ -14,7 +14,7 @@ module.exports = {
         }
     },
     async editPost (req, res) {
-
+        console.log(cube.name);
         const cube = {
             name: req.body.name,
             description: req.body.description,
