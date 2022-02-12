@@ -3,6 +3,6 @@
 [x] Split data services and create uniting storage middlewares
 [x] Create user server and auth middle ware
 [x] Implement user page
+[x] Implement route guards
 [ ] Update cube, accessory, comment models
-[ ] Implement route guards
 [ ] The rest...
