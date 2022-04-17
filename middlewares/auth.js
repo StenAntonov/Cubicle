@@ -5,25 +5,25 @@ const { COOKIE_NAME, TOKEN_SECRET } = require('../config');
 const userService = require('../services/user');
 
 module.exports = () => (req, res, next) => {
-    
+
     req.auth = {
         register,
         login,
         logout
     };
-    
-    if(readToken(req)) {
+
+    if (readToken(req)) {
         next();
     };
 
-    async function register({ username, password, repeatPassword }) {
-        if (username == '' || password == '' || repeatPassword == '') {
-            throw new Error('All fields are required!');
-        } else if (password != repeatPassword) {
-            throw new Error('Passwords don\'t match!');
+    async function register({ username, password }) {
+        const existing = await userService.getUserByUsername(username);
+        if (existing) {
+            throw new Error('Username is taken!');
         }
 
-        const hashedPassword = await bcrypt.hash(password, 10);
+
+            const hashedPassword = await bcrypt.hash(password, 10);
         await userService.createUser(username, hashedPassword);
     }
 
@@ -37,7 +37,7 @@ module.exports = () => (req, res, next) => {
             if (!isMatch) {
                 throw new Error('Wrong username or password!');
             } else {
-                req.user = createToken(user); 
+                req.user = createToken(user);
             };
         }
     };
@@ -56,13 +56,13 @@ module.exports = () => (req, res, next) => {
 
     function readToken(req) {
         const token = req.cookies[COOKIE_NAME];
-        if(token) {
-            try{
+        if (token) {
+            try {
                 const userData = jwt.verify(token, TOKEN_SECRET);
                 req.user = userData;
                 res.locals.user = userData;
                 console.log('Known user', userData.username);
-            }catch(err) {
+            } catch (err) {
                 res.clearCookie(COOKIE_NAME);
                 res.redirect('/auth/login');
                 return false;
