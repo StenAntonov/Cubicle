@@ -25,10 +25,15 @@
         {{/if}}
       </ul>
     </header>
-    <main>
-      {{#if error}}
+      {{#if errors}}
+    <div id="notifications">
+        {{#each errors}}
+      <p id="notification-message">{{this}}</p>
+        {{/each}}
       <span class="error">{{error}}</span>
+    </div>
       {{/if}}
+    <main>
       {{{body}}}
     </main>
   </div>
